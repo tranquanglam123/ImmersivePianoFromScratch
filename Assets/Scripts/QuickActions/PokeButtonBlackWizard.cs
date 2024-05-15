@@ -1,10 +1,7 @@
-using Oculus.Interaction;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ImmersivePiano.Interaction.Editor.QuickActions
 {

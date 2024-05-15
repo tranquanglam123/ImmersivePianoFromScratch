@@ -100,6 +100,7 @@
     <string>Van Morrison - Wild Nights</string>
     <string>Void World's 2nd Half</string>
     <string>WishYouWereHere</string>
+    <string>Yiruma - Rivers Flow In You _1_</string>
     <string>Yves Montand - A bicyclette</string>
     <string>Zagronia - Dw1gOver</string>
   </MidiFiles>

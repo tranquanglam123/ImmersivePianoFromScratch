@@ -1,62 +1,56 @@
+using ImmersivePiano.MIDI;
+using MidiPlayerTK;
+using Oculus.Interaction;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ImmersivePiano
 {
-    //[RequireComponent(typeof(AudioSource))]
-    public class Key : MonoBehaviour
+    public class Key : MonoBehaviour, IPressable
     {
-        //[SerializeField] AudioClip sound;
-        //[SerializeField] Animator animator;
-        //[SerializeField] AudioSource audioSource;
-        [SerializeField] string keyName;
-        [SerializeField] GameObject child;
+        
+        [SerializeField] int keyValue;
+        private MPTKEvent noteEvent;
 
-        public static string lastPressedKey;
+        #region MPTKEvent params
+        private MPTKCommand command = MPTKCommand.NoteOn;
+        private int channel = 0;
+        private float duration = 0;
+        private float velocity = 0;
+        private long delay = 0;
+        #endregion
 
+
+        private void OnEnable()
+        {
+            noteEvent = new MPTKEvent()
+            {
+                Command = command,
+                Value = keyValue,
+                Channel = channel,
+                Delay = delay
+            };
+        }
         private void Start()
         {
-            //audioSource = GetComponent<AudioSource>();
-            //animator = GetComponent<Animator>();
-            //audioSource.clip = sound;
             try
             {
-                child = transform.GetChild(1).gameObject;
+                transform.GetChild(0).gameObject.GetComponent<PokeInteractable>();
             }
-            catch (Exception) { }
+            catch (NullReferenceException) { }
+        }
+       
+        public void Press()
+        {
+            MIDISystemManagement.instance.GetMidiStreamPlayer().MPTK_PlayEvent(noteEvent);
         }
 
-        //public void PlaySound()
-        //{
-        //    audioSource.volume = 1;
-        //    audioSource.Play();
-
-        //    animator.SetBool("Pressed", true);
-        //    StopAllCoroutines();
-        //    SetLastPressedKey();
-        //}
-
-        //public void StopSound()
-        //{
-        //    animator.SetBool("Pressed", false);
-        //    StartCoroutine(DecreaseVolume());
-        //}
-
-        //IEnumerator DecreaseVolume()
-        //{
-        //    while (audioSource.volume > 0.01)
-        //    {
-        //        audioSource.volume -= 0.02f;
-        //        yield return null;
-        //    }
-        //}
-
-        private void SetLastPressedKey()
+        public void StopPressing()
         {
-            lastPressedKey = keyName;
-            Debug.Log(lastPressedKey);
+            MIDISystemManagement.instance.GetMidiStreamPlayer().MPTK_StopEvent(noteEvent);
         }
     }
 }
